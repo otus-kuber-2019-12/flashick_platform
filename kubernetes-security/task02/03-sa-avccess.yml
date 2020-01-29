@@ -1,7 +1,6 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
-  namespace: prometheus
   name: prometheus-gwl
 rules:
 - apiGroups: [""] 
@@ -10,15 +9,13 @@ rules:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata: 
   name: prometheus-admin
-  namespace: prometheus
 subjects:
 - kind: Group  
-  name: system:serviceaccounts  
-  namespace: prometheus
+  name: system:serviceaccounts:prometheus
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: prometheus-gwl
   apiGroup: rbac.authorization.k8s.io
