@@ -60,21 +60,22 @@ def update_psswd(body, spec, diff, status, logger, **kwargs):
         'password': password,
         'database': database})
 
+    for diff_entry in diff:
+      if diff_entry[0] == "change":
+        if diff_entry[1][1] == "password":
+          old_pass = diff_entry[2]
+          new_pass = diff_entry[3]
 
-    if diff[0][1][1] == "password":
-      old_pass = diff[0][2]
-      new_pass = diff[0][3]
+          pass_change_job = render_template('pass-change-job.yml.j2', {
+            'name': name,
+            'image': image,
+            'old_password': old_pass,
+            'new_password': new_pass})
 
-      pass_change_job = render_template('pass-change-job.yml.j2', {
-        'name': name,
-        'image': image,
-        'old_password': old_pass,
-        'new_password': new_pass})
-
-      api = kubernetes.client.BatchV1Api()
-      api.create_namespaced_job('default', pass_change_job)
-      if wait_until_job_end(f"pass-change-{name}-job"):
-          kopf.info(body, reason="PassChange", message="Password for " + name + " has been changed.")
+          api = kubernetes.client.BatchV1Api()
+          api.create_namespaced_job('default', pass_change_job)
+          if wait_until_job_end(f"pass-change-{name}-job"):
+              kopf.info(body, reason="PassChange", message="Password for " + name + " has been changed.")
       
     api = kubernetes.client.AppsV1Api()
     api.patch_namespaced_deployment(name,'default',deployment_patch)
