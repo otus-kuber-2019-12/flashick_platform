@@ -1,0 +1,11 @@
+spec:
+  template:
+    spec:
+      containers:
+      - image: {{ image }}
+        env:
+        - name: MYSQL_ROOT_PASSWORD # так делать не нужно, тут лучше secret
+          value: {{ password }}
+        - name: MYSQL_DATABASE
+          value: {{ database }}
+ 
