@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-v1 
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: canary-v1  
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
+  template: 
+    metadata:
+      name: canary-v1  
+      labels: 
+        app: "canary-v1"
+    spec: 
+      containers: 
+      - name: canary-v1 
+        image: flashick/simple-web-server:0.3
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: 8000
+        livenessProbe:
+          tcpSocket: { port: 8000 }
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      initContainers:
+      - name: init
+        image: busybox:1.31.0
+        command: ['sh', '-c', 'echo "v1" > /app/index.html']
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      volumes:
+      - name: app
+        emptyDir: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-svc-v1
+spec:
+  selector:
+    app: canary-v1
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-v2 
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: canary-v2  
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
+  template: 
+    metadata:
+      name: canary-v2  
+      labels: 
+        app: "canary-v2"
+    spec: 
+      containers: 
+      - name: canary-v2 
+        image: flashick/simple-web-server:0.3
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: 8000
+        livenessProbe:
+          tcpSocket: { port: 8000 }
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      initContainers:
+      - name: init
+        image: busybox:1.31.0
+        command: ['sh', '-c', 'echo "v2" > /app/index.html']
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      volumes:
+      - name: app
+        emptyDir: {}        
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-svc-v2
+spec:
+  selector:
+    app: canary-v2
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000        

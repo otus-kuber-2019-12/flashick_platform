@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: canary-v1
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / 
+spec:
+  rules:
+  - host: canary
+    http:
+      paths:
+      - path: /canary(/|$)(.*)
+        backend:
+          serviceName: canary-svc-v1
+          servicePort: 80
+
+---          
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: canary-v2
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / 
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "canary"
+    nginx.ingress.kubernetes.io/canary-by-header-value: "true"
+spec:
+  rules:
+  - host: canary
+    http:
+      paths:
+      - path: /canary(/|$)(.*)
+        backend:
+          serviceName: canary-svc-v2
+          servicePort: 80
