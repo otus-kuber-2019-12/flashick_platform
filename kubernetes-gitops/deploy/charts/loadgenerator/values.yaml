@@ -1,0 +1,5 @@
+image:
+  repository: flashick/loadgenerator
+  tag: latest
+ingress:
+  host: 34.66.117.30

@@ -1,0 +1,6 @@
+image:
+  repository: flashick/frontend
+  tag: latest
+ingress:
+  host: 34.66.117.30
+environment: develop

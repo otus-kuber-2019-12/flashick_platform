@@ -1,0 +1,70 @@
+version: "3.5"
+
+
+services:
+
+  adservice:
+    build:
+        context: ./src/adservice
+        dockerfile: ./Dockerfile
+    image: flashick/adservice2:${CI_COMMIT_TAG}
+
+  cartservice:
+    build:
+        context: ./src/cartservice
+        dockerfile: ./Dockerfile
+    image: flashick/cartservice:${CI_COMMIT_TAG}
+
+  checkoutservice:
+    build:
+        context: ./src/checkoutservice
+        dockerfile: ./Dockerfile
+    image: flashick/checkoutservice:${CI_COMMIT_TAG}
+
+  currencyservice:
+    build:
+        context: ./src/currencyservice
+        dockerfile: ./Dockerfile
+    image: flashick/currencyservice:${CI_COMMIT_TAG}
+
+  emailservice:
+    build:
+        context: ./src/emailservice
+        dockerfile: ./Dockerfile
+    image: flashick/emailservice:${CI_COMMIT_TAG}
+
+  frontend:
+    build:
+        context: ./src/frontend
+        dockerfile: ./Dockerfile
+    image: flashick/frontend:${CI_COMMIT_TAG}
+
+  loadgenerator:
+    build:
+        context: ./src/loadgenerator
+        dockerfile: ./Dockerfile
+    image: flashick/loadgenerator:${CI_COMMIT_TAG}
+
+  paymentservice:
+    build:
+        context: ./src/paymentservice
+        dockerfile: ./Dockerfile
+    image: flashick/paymentservice:${CI_COMMIT_TAG}
+
+  productcatalogservice:
+    build:
+        context: ./src/productcatalogservice
+        dockerfile: ./Dockerfile
+    image: flashick/productcatalogservice:${CI_COMMIT_TAG}
+
+  recommendationservice:
+    build:
+        context: ./src/recommendationservice
+        dockerfile: ./Dockerfile
+    image: flashick/recommendationservice:${CI_COMMIT_TAG}
+
+  shippingservice:
+    build:
+        context: ./src/shippingservice
+        dockerfile: ./Dockerfile
+    image: flashick/shippingservice:${CI_COMMIT_TAG}

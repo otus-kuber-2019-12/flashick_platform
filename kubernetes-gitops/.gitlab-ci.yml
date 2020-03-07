@@ -1,0 +1,17 @@
+stages:
+  - build
+
+services:
+  - docker:dind
+
+build:
+  image: tmaier/docker-compose
+  stage: build
+  only:
+      - /^v.*$/
+  script:
+    - docker login -u ${DEPLOY_USER} -p ${DEPLOY_PASSWORD} index.docker.io
+    - docker-compose build
+    - docker-compose push
+
+  
