@@ -1,0 +1,6 @@
+- Создан кластер в google cloud
+- Развернут EFK стэк и loki
+- Развернут prometheus-operator
+- Настроен ingress для grafana и kibana
+- Настроен мониторинг elasticsearch с помощью elasticsearch-exporter
+- Сконфигурированы визуализации и дашборд в grafana и kibana

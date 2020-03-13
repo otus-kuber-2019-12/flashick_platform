@@ -1,0 +1,40 @@
+prometheus:
+  prometheusSpec:
+    retention: 1d
+    ### Check this labels: kubectl get prometheus -o yaml -n monitoring
+    serviceMonitorNamespaceSelector: {} ### Namespace for ServiceMonitors select
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {} ### matchLabels for ServiceMonitors select
+    # serviceMonitorSelector:
+    # matchLabels:
+    # prometheus: kube-prometheus
+    # release: prometheus-cluster-monitoring
+
+tolerations:
+  - key: node-role
+    operator: Equal
+    value: infra
+    effect: NoSchedule    
+
+nodeSelector: 
+  cloud.google.com/gke-nodepool: infra-pool    
+
+grafana:
+  adminPassword: "qwerty"
+
+  additionalDataSources: 
+  - name: loki
+    access: proxy
+    type: loki
+    url: http://loki-0:3100
+
+
+  ingress:
+    enabled: true
+    annotations: {
+    kubernetes.io/ingress.class: nginx
+    }
+    path: /
+    hosts:
+    - grafana.35.238.203.10.xip.io  
+  
