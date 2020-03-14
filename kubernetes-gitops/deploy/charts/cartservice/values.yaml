@@ -1,0 +1,8 @@
+image:
+  repository: flashick/cartservice
+  tag: latest
+
+redis:
+  cluster:
+    enabled: false
+  usePassword: false
